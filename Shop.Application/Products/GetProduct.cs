@@ -22,9 +22,9 @@ namespace Shop.Application.Products
 
             if (stocksOnHold.Count > 0)
             {
-                var stockToReturn = _ctx.Stock.Where(x => stocksOnHold.Any(y => y.StockId == x.Id)).ToList();
+                var stockToReturn = _ctx.Stock.Where(x => stocksOnHold.Select(y => y.StockId).Contains(x.Id)).ToList();
 
-                foreach (var stock in stocksOnHold)
+                foreach (var stock in stockToReturn)
                 {
                     stock.Qty = stock.Qty + stocksOnHold.FirstOrDefault(x => x.StockId == stock.Id).Qty;
                 }

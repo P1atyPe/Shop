@@ -31,6 +31,7 @@ namespace Shop.Application.Cart
         {
 
 
+            var stockOnHold = _ctx.StocksOnHold.Where(x => x.SessionId == _session.Id).ToList();
             var stockToHold = _ctx.Stock.Where(x => x.Id == request.StockId).FirstOrDefault();
 
             if (stockToHold.Qty < request.Qty)
@@ -41,11 +42,17 @@ namespace Shop.Application.Cart
             _ctx.StocksOnHold.Add(new StockOnHold
             {
                 StockId = stockToHold.Id,
+                SessionId = _session.Id,
                 Qty = request.Qty,
                 ExpiryDate = DateTime.Now.AddMinutes(20)
             });
 
             stockToHold.Qty = stockToHold.Qty - request.Qty;
+
+            foreach (var stock in stockOnHold)
+            {
+                stock.ExpiryDate = DateTime.Now.AddMinutes(20);
+            }
 
             await _ctx.SaveChangesAsync();
 
