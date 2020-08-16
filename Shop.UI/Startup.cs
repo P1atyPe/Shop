@@ -26,11 +26,10 @@ namespace Shop.UI
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
 
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(_config["DefaultConnection"]));
 
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequiredLength = 6;
@@ -39,11 +38,18 @@ namespace Shop.UI
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Accounts/Login";
+            });
+
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
-                options.AddPolicy("Manager", policy => policy.RequireClaim("Manager"));
+                options.AddPolicy("Admin", policy => policy.RequireClaim("Role", "Admin"));
+                options.AddPolicy("Manager", policy => policy.RequireClaim("Role", "Manager"));
             });
+
+            services.AddRazorPages(options => options.Conventions.AuthorizeFolder("/Admin"));
 
             services.AddSession(options =>
             {
@@ -70,9 +76,11 @@ namespace Shop.UI
 
             app.UseSession();
 
-            app.UseAuthentication();
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
