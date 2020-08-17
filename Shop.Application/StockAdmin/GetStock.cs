@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Shop.Application.ProductsAdmin
+namespace Shop.Application.StockAdmin
 {
     public class GetStock
     {
