@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Shop.Application.UsersAdmin;
 using Shop.Database;
 using Stripe;
 
@@ -53,7 +54,11 @@ namespace Shop.UI
                     || context.User.HasClaim("Role", "Admin")));
             });
 
-            services.AddRazorPages(options => options.Conventions.AuthorizeFolder("/Admin"));
+            services.AddRazorPages(options => 
+            {
+                options.Conventions.AuthorizeFolder("/Admin");
+                options.Conventions.AuthorizePage("/Admin/ConfigureUsers", "Admin");
+            });
 
             services.AddSession(options =>
             {
@@ -62,6 +67,8 @@ namespace Shop.UI
             });
 
             StripeConfiguration.ApiKey = _config.GetSection("Stripe")["SecretKey"];
+
+            services.AddTransient<CreateUser>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
