@@ -54,6 +54,8 @@ namespace Shop.UI
                     || context.User.HasClaim("Role", "Admin")));
             });
 
+            services.AddMvc(options => options.EnableEndpointRouting = false);
+                
             services.AddRazorPages(options => 
             {
                 options.Conventions.AuthorizeFolder("/Admin");
@@ -85,22 +87,14 @@ namespace Shop.UI
 
             app.UseStaticFiles();
 
-            app.UseSession();
-
-
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Admin}/{action=Index}/{id?}"
-                    );
-            });
+            app.UseSession();
+
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
