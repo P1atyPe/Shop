@@ -70,7 +70,7 @@ namespace Shop.UI
 
             StripeConfiguration.ApiKey = _config.GetSection("Stripe")["SecretKey"];
 
-            services.AddTransient<CreateUser>();
+            services.AddApplicationServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
