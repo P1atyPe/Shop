@@ -55,15 +55,16 @@ namespace Shop.UI
             });
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
-                
-            services.AddRazorPages(options => 
+
+            services.AddRazorPages(options =>
             {
                 options.Conventions.AuthorizeFolder("/Admin");
                 options.Conventions.AuthorizePage("/Admin/ConfigureUsers", "Admin");
-            });
+            }).AddRazorRuntimeCompilation();
 
             services.AddSession(options =>
             {
+                options.Cookie.IsEssential = true;
                 options.Cookie.Name = "Cart";
                 options.Cookie.MaxAge = TimeSpan.FromMinutes(20);
             });

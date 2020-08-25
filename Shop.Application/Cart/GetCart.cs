@@ -34,7 +34,7 @@ namespace Shop.Application.Cart
 
         public IEnumerable<Response> Do()
         {
-            //TODO: account for multiple items in the cart.
+            // account for multiple items in the cart.
             var stringObject = _session.GetString("cart");
 
             if (string.IsNullOrEmpty(stringObject))

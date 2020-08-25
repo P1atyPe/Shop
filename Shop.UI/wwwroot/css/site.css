@@ -25,3 +25,8 @@
 .StripeElement--webkit-autofill {
     background-color: #fefde5 !important;
 }
+
+.align-self-center {
+    align-self: center;
+}
+
